@@ -1,5 +1,5 @@
 PODS:
-  - ContentSdkPure (1.2.0-SNAPSHOT)
+  - ContentSdkPure (1.2.0)
 
 DEPENDENCIES:
   - ContentSdkPure (from `./ContentSdkPure`)
@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: "./ContentSdkPure"
 
 SPEC CHECKSUMS:
-  ContentSdkPure: 11ff61daebdea81b559b4769e1a3bc34f75c37df
+  ContentSdkPure: ae5095bd051f19a770a2430616a25edbd057bfbf
 
 PODFILE CHECKSUM: ed00d4af420ff0fbd767bfde002bace4602228c8
 
