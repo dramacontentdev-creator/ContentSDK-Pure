@@ -53,7 +53,7 @@ android {
         minSdk = 24
         targetSdk = 37
         versionCode = 1
-        versionName = "1.2.0"
+        versionName = "1.0.0"
         resValue("string", "app_name", "CSDK Pure")
     }
 
