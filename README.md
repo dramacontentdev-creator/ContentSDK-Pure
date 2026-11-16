@@ -1,110 +1,128 @@
-# Content SDK Demo: Pure Edition
+# Content SDK Demo
 
-English | [中文](README.zh-CN.md) · [Commercial edition demo](https://github.com/dramacontentdev-creator/ContentSDK-Commercial)
+English | [中文](README.zh-CN.md)
 
-This repository does not include the SDK. Get the SDK package for this edition and platform from your SDK provider, then put the files where the quick start below says.
+Shows how to integrate Content SDK on Android and iOS: drama home, player, playback control, player page customization, and revenue reports. Integration steps are marked in the code so you can copy them into your app.
 
-The SDK shows no ads. Your app monetizes locked episodes on its own and reports the revenue to the
-SDK. Use the pure SDK packages here.
+This repository does not include the SDK. Get the SDK package from your SDK provider and put the files where the quick start says, then run.
 
-## Quick start: Android
+## Repository layout
+
+```text
+android/                         Android project (open this folder in Android Studio)
+  settings.gradle.kts            Repositories
+  app/
+    build.gradle.kts             AAR and dependency script
+    libs/                        SDK AAR goes here (not committed)
+    content-sdk-dependencies.gradle   Dependency script from the SDK package (not committed)
+    src/main/kotlin/com/lc/content/sdk/demo/
+      DemoApplication.kt         Initialize
+      DemoEdition.kt             App ID / App Secret, start
+      MainActivity.kt            Open SDK pages
+      catalog/                   API reference with examples to copy
+      customization/             Player page customization (Compose and View)
+      lab/                       Player lab
+      ui/                        Demo UI only, not needed in your app
+ios/                             iOS project
+  Podfile                        SDK Pod
+  ContentSdkPure/                    iOS SDK package goes here (not committed)
+  ContentSdkDemo.xcworkspace     Created by pod install; open the project with it
+  ContentSdkDemo/
+    ContentSdkDemoApp.swift      Initialize
+    DemoEdition.swift            App ID / App Secret, start
+    SdkIntegration.swift         Open SDK pages
+    Catalog/                     API reference with examples to copy
+    Customization/               Player page customization (SwiftUI and UIKit)
+    Lab/                         Player lab
+    UI/                          Demo UI only, not needed in your app
+```
+
+## Quick start
+
+### Android
 
 1. From `ContentSdk-pure-Android-YOUR_SDK_VERSION-release`, copy `ContentSdk-pure-YOUR_SDK_VERSION.aar` into `android/app/libs/`.
-2. Copy `content-sdk-dependencies.gradle` from the same package into `android/app/`. The pure script has no ad dependencies; do not reuse the commercial one.
+2. Copy `content-sdk-dependencies.gradle` from the same package into `android/app/`.
 3. Open `android/` in Android Studio and run `app`.
 
-## Quick start: iOS
+### iOS
 
-1. Copy everything in `ContentSdk-pure-iOS-YOUR_SDK_VERSION-release` into `ios/ContentSdkPure/`. The package contains `ContentSdkPure.podspec` and no `SKAdNetworkItems.plist`.
+1. Copy everything in `ContentSdk-pure-iOS-YOUR_SDK_VERSION-release` into `ios/ContentSdkPure/`.
 2. Run `pod install` in `ios/`.
 3. Open `ios/ContentSdkDemo.xcworkspace` and run.
 
 To run on a device, create `ios/Signing.local.xcconfig` with `DEVELOPMENT_TEAM = YOUR_TEAM_ID` (see `ios/Signing.xcconfig`). The file is git-ignored; setting the team in Xcode's Signing tab would write it into the project file instead.
 
-The Swift module is still `ContentSdk`, so the code keeps `import ContentSdk`.
+> The AAR, the dependency script, and the iOS SDK package must come from the same SDK version.
 
 ## Integrate into your app
 
-Each step is marked `Content SDK - integration Step N` in the code. Copy them in order. Android and iOS count their steps separately, so read each column from top to bottom (the iOS column has no dependency step):
+Each step is marked `Content SDK - integration Step N` in the code. Copy them in order. Android and iOS are numbered separately:
 
 | Step | Android | iOS |
 |---|---|---|
 | 1 | `settings.gradle.kts`: `google()`, `mavenCentral()`, and the AAR folder | `Podfile`: `pod 'ContentSdkPure'` |
-| 2 | `app/build.gradle.kts`: AAR and dependencies | `ContentSdkDemoApp.swift`: initialize |
+| 2 | `app/build.gradle.kts`: AAR and dependency script | `ContentSdkDemoApp.swift`: initialize |
 | 3 | `DemoApplication.kt`: initialize | `DemoEdition.swift`: start |
-| 4 | `DemoEdition.kt`: start | `SdkIntegration.swift`: open the SDK page |
-| 5 | `MainActivity.kt`: open the SDK page | |
+| 4 | `DemoEdition.kt`: start | `SdkIntegration.swift`: open SDK pages |
+| 5 | `MainActivity.kt`: open SDK pages | |
 
-No AdMob Application ID, SKAdNetworkItems, or ad consent step is needed.
+In iOS code, write `import ContentSdk`.
 
-Then fill in your own values: get the App ID / App Secret at
-[https://open.lucky-chick.com](https://open.lucky-chick.com) and put them in `SdkConfig` in
-`DemoEdition.kt` / `DemoEdition.swift`. The demo values are for the demos only.
+Then fill in your own values:
 
-Everything else is optional and works with SDK defaults:
+- App ID / App Secret: get them at [https://open.lucky-chick.com](https://open.lucky-chick.com) and put them in `SdkConfig` in `DemoEdition.kt` / `DemoEdition.swift`.
 
-- `customization/`: replace parts of the SDK player page with your own UI. On Android start with `CustomRegions.kt`, which holds the SDK calls and a long explanation; `compose/` and `view/` hold the same info region, controls region, and episode list written for Compose and for Android Views, and `PlayerFeed.kt` turns the controller's state into what they draw. On iOS the same pieces are `CustomRegions.swift`, `SwiftUI/`, `UIKit/`, and `PlayerFeed.swift`; there the app owns navigation, so a custom info region closes the page through `PlayerPageCloser`. Pick a style on the demo home screen (SDK default, Compose / SwiftUI, or View / UIKit), then open the player. Copy whichever matches your UI toolkit.
-- `lab/` (Android) / `Lab/` (iOS): the player lab. The SDK player page fills the screen and the demo draws its own control panel over it: play / pause, seek, speed, quality, and episodes; playback options; the page style; `autoHide`, `setRegionVisible`, and `setControlsHeld`; and a log of every call and playback event. Every SDK call it makes is in `LabActions.kt` / `LabActions.swift`. Open it from the demo home screen.
-- `catalog/SdkApiCatalog.kt` / `SdkApiCatalog.swift`: APIs both editions have, with examples to copy (playback control, playback options, history, player page regions, your own player, revenue reports, ...).
-- `catalog/EditionApiCatalog.kt` / `EditionApiCatalog.swift`: your own monetization, as an example to copy (`monetizeEpisodes`; the demo app does not switch it on). When an episode your own rules charge for starts (in the example: past episode 5): pause, show your paywall or ad, report it with `reportPurchaseRevenue` / `reportAdRevenue`, then call `play()`. A controller has one state listener, so if your app already listens (like `PlayerFeed` in `customization/`), put the check there. An episode the content service reports as locked (`state.episodeLocked`) cannot play: `play()` does not start it and the SDK shows "unavailable".
-- `ui/` (Android and iOS): demo UI only.
+## Features
 
-## API index
+From the demo home screen you can open:
 
-Sections are those of `SdkApiCatalog` (`catalog/SdkApiCatalog.kt` on Android, `Catalog/SdkApiCatalog.swift` on iOS); both platforms use the same numbers.
+- **SDK pages**: the drama home and the player, with the full UI from the SDK.
+- **Player page styles**: pick SDK default, Compose / SwiftUI, or View / UIKit on the home screen, then open the player to see your own UI replace the info region, controls region, and episode list (`customization/`).
+- **Player lab**: the SDK player page fills the screen and the demo draws its own control panel over it: play / pause, seek, speed, quality, episodes, playback options, region visibility, and a log of every call and playback event (`lab/` / `Lab/`; the SDK calls are in `LabActions.kt` / `LabActions.swift`).
+- **Your own monetization**: the SDK shows no ads. `EditionApiCatalog` has an example: when an episode your own rules charge for starts, pause, show your paywall or ad, report the revenue, then continue. The demo does not switch it on.
+
+## API reference
+
+The § numbers are sections of `SdkApiCatalog` (`catalog/SdkApiCatalog.kt` on Android, `Catalog/SdkApiCatalog.swift` on iOS). Both platforms use the same numbers.
 
 | API | Where | Use |
 |---|---|---|
-| `initialize` / `start` | Integration steps above; Android with coroutines: `EditionApiCatalog` P1 | Required setup |
-| `setLoggingEnabled` | §1 | SDK logs |
-| `setStrategy` | §2 | Resource strategy |
-| `setColorPalette` / `resetColorPalette`, `setSubtitleStyle` / `resetSubtitleStyle` | §3 | Theme colors and subtitles |
-| Android: `openDramaPlayerPage`, `createDramaHomeFragment`, `createDramaPlayerFragment`, `DramaHomeScreen`, `DramaPlayerScreen`; iOS: `dramaHome` variants, `dramaPlayer` | §4 | Other ways to show SDK pages |
-| `login` / `setLanguage` | §5 | User or app language changed |
-| `setPlayerEventListener` | §6 | Playback events |
-| `getDramaList` | §7 | Your own drama list |
-| `setPlayerControllerListener`; controller `play`, `pause`, `seekTo`, `setPlaybackSpeed`, `setQuality`, `selectEpisode`, `setListener` | §8.1 - 8.2; runnable: lab | Drive the SDK player page from your UI |
-| `setContentListener` / `setProgressListener` | §8.3; runnable: `customization/PlayerFeed` | Content and progress for your own controls |
-| `setControlsHeld` | §8.4; runnable: lab | Keep the page controls shown under your dialog |
-| `setAutoPlay` / `setAutoAdvance` / `setResumeFromHistory` | §9; runnable: lab settings | Playback options |
+| `initialize` / `start` | Integration steps | Initialize and start the SDK. Show SDK pages only after `start` succeeds |
+| `setLoggingEnabled` | §1 | SDK diagnostic logs |
+| `setStrategy` | §2 | Resource strategy (cache and preload level) |
+| `setColorPalette` / `resetColorPalette`, `setSubtitleStyle` / `resetSubtitleStyle` | §3 | Theme colors and subtitle style |
+| Android: `openDramaHomePage`, `openDramaPlayerPage`, `createDramaHomeFragment`, `createDramaPlayerFragment`, `DramaHomeScreen`, `DramaPlayerScreen`; iOS: `dramaHome`, `dramaPlayer` | §4 | Show the drama home and player with Activity / Fragment / Compose or UIKit / SwiftUI |
+| `login` / `setLanguage` | §5 | User or app language changes |
+| `setPlayerEventListener` | §6 | Playback events: first frame, state, progress, errors |
+| `getDramaList` | §7 | Fetch the drama list and show it in your own UI |
+| `setPlayerControllerListener`; controller `play`, `pause`, `seekTo`, `setPlaybackSpeed`, `setQuality`, `selectEpisode`, `setListener` | §8.1 - 8.2, lab | Control the SDK player page from your own UI |
+| `setContentListener` / `setProgressListener` | §8.3, `customization/PlayerFeed` | Drama info, episode list, and progress for your own controls |
+| `setControlsHeld` | §8.4, lab | Keep the page controls visible while your own dialog covers the page |
+| `setAutoPlay` / `setAutoAdvance` / `setResumeFromHistory` | §9, lab settings | Auto play, auto advance, resume from history |
 | `getPlaybackHistory` / `removePlaybackHistory` / `clearPlaybackHistory` | §10 | Continue watching |
-| `setVideoRegion` / `setInfoRegion` / `setControlsRegion`, `DramaPlayerRegion` | §11; runnable: `customization/` | Replace parts of the player page |
-| `DramaPlayerRegion(autoHide)`, `setRegionVisible`, `state.controlsVisible` | §11; runnable: lab settings | Show and hide your regions yourself |
-| `createPlayer`; Android `ContentPlayerView` / `createPlayerView`, iOS `playerViewController` | §12 | The player inside your own UI |
-| `reportAdRevenue` / `reportPurchaseRevenue` | §13 | Revenue your app earns itself |
-| Locked episodes: pause, your paywall or ad, report, play | `EditionApiCatalog` P2 (Android) / P1 (iOS) | Your own monetization |
+| `setVideoRegion` / `setInfoRegion` / `setControlsRegion`, `DramaPlayerRegion` | §11, `customization/` | Replace the video, info, or controls region of the player page |
+| `DramaPlayerRegion(autoHide)`, `setRegionVisible`, `state.controlsVisible` | §11, lab settings | Decide yourself when a region shows or hides |
+| `createPlayer`; Android `ContentPlayerView` / `createPlayerView`, iOS `playerViewController` | §12 | Put a player in your own UI instead of the SDK player page |
+| `reportAdRevenue` / `reportPurchaseRevenue` | §13 | Report revenue from your app's own ads and purchases |
+| `start` (coroutine version) | `EditionApiCatalog` P1 (Android) | Start the SDK with coroutines |
+| Locked episode: pause, your paywall or ad, report, play | `EditionApiCatalog` P2 (Android) / P1 (iOS) | Your own monetization flow |
 
-Android source layout (`app/src/main/kotlin/com/lc/content/sdk/demo/`):
+## Using the APIs
 
-```
-DemoApplication.kt   Step 3: initialize
-DemoEdition.kt       credentials, Step 4: start (differs per edition)
-MainActivity.kt      Step 5: open the SDK page
-catalog/             every API with an example to copy
-customization/       replace parts of the player page (Compose and View)
-lab/                 player lab: your own controls over the SDK player page
-ui/                  the demo's own screens; not needed to integrate
-```
+1. **Get the required steps running first**: copy steps 1 to the last one from "Integrate into your app", then open the drama home after `start` succeeds. That alone covers the basic features.
+2. **Look up `SdkApiCatalog` as needed**: each section says when to call the API, what the parameters mean, and has an example to copy. Section numbers are in the table above. Every other API is optional; without a call the SDK uses its defaults.
+3. **Monetization is in `EditionApiCatalog`**: the `monetizeEpisodes` example pauses on an episode you charge for, shows your paywall or ad, reports it with `reportPurchaseRevenue` / `reportAdRevenue`, then calls `play()`. A controller has one state listener, so if you already listen (like `PlayerFeed` in `customization/`), put the check there. An episode the content service reports as locked (`state.episodeLocked`) cannot play; `play()` does not start it.
+4. **To change the player page UI**: start with `customization/CustomRegions.kt` (iOS `CustomRegions.swift`), which holds the SDK calls and explanations. Then copy `compose/` or `view/` (iOS `SwiftUI/` or `UIKit/`) for your UI toolkit. `PlayerFeed` turns the player state into what your UI draws.
+5. **To check playback control**: tap through the matching buttons in the lab, read the calls and events in its log, then find the SDK call in `LabActions`.
 
-iOS source layout (`ios/ContentSdkDemo/`):
+Rules for every call:
 
-```
-ContentSdkDemoApp.swift   Step 2: initialize
-DemoEdition.swift         credentials, Step 3: start (differs per edition)
-SdkIntegration.swift      Step 4: open the SDK page
-Catalog/                  every API with an example to copy
-Customization/            replace parts of the player page (SwiftUI and UIKit)
-Lab/                      player lab: your own controls over the SDK player page
-UI/                       the demo's own screens; not needed to integrate
-```
+- Call every API on the main thread; callbacks also run on the main thread.
+- Call `initialize` once per process. Use the other APIs after `start` succeeds.
+- Each kind of listener keeps one instance. Setting it again replaces the old one; pass `null` / `nil` to stop.
 
-iOS uses SF Symbols, so there are no icon assets to copy.
-
-The icons in `app/src/main/res/drawable/ic_*.xml` are Material icons (Apache License 2.0).
-
-App ids: Android `com.lc.content.sdk.demo.pure`, iOS `com.lc.content.sdk.demo.ios.pure`. All four demos (commercial and pure, Android and iOS) use one set of demo credentials, for the demos only; use your own App ID / App Secret in your app.
-
-## Demo environment
+## Environment
 
 | Android | |
 |---|---|
@@ -122,8 +140,12 @@ App ids: Android `com.lc.content.sdk.demo.pure`, iOS `com.lc.content.sdk.demo.io
 
 ## Logs
 
-Debug builds turn on SDK diagnostic logging with `setLoggingEnabled`, so you can follow
-initialization and page loading. Keep it off in release builds.
+Debug builds turn on SDK diagnostic logging with `setLoggingEnabled`, so you can follow initialization and page loading. Keep it off in release builds.
 
 - Android: filter Logcat by `ContentSdk`.
 - iOS: filter the Xcode console by `ContentSdk`.
+
+## Notes
+
+- The App ID / App Secret in this demo are for the demo only. Use your own values in your app.
+- The Android icons in `app/src/main/res/drawable/ic_*.xml` are Material icons (Apache License 2.0). iOS uses SF Symbols, so there are no icon assets to copy.
