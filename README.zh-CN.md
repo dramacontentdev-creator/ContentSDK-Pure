@@ -527,7 +527,7 @@ playerVC.didMove(toParent: parent)
 <summary><b>收入回传 reportAdRevenue / reportPurchaseRevenue</b></summary>
 
 - 应用自己展示的广告：每次展示调用一次 `reportAdRevenue`，通常在广告平台的收益回调里。应用自己的内购或订阅：每次支付成功调用一次 `reportPurchaseRevenue`。
-- 所有字段必传，金额按美元。`valueUsd` 是这次展示的价值（不是 eCPM）。
+- 所有字段必传，金额按美元。`valueUsd` 是这次展示的价值（不是 eCPM）。SDK 按传入的值原样上报，不做换算，所以要传美元金额：Android AdMob 的 `AdValue.valueMicros` 是百万分之一单位，要除以 `1_000_000`；iOS AdMob 的 `GADAdValue.value` 已经是金额单位，直接传。广告账号币种不是美元时（见 `currencyCode`），先换算成美元。
 - `dedupeId` 用于去重：广告传广告平台的 response id，内购传商店订单号（Google Play `orderId`、App Store `transactionId`）。不同的展示或支付必须用不同的 id。
 
 Android:

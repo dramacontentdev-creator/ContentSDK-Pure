@@ -527,7 +527,7 @@ playerVC.didMove(toParent: parent)
 <summary><b>Revenue reports: reportAdRevenue / reportPurchaseRevenue</b></summary>
 
 - Ads your app shows: call `reportAdRevenue` once per impression, usually in the ad platform's paid callback. Your own purchases or subscriptions: call `reportPurchaseRevenue` once per successful payment.
-- Every field is required; amounts are in US dollars. `valueUsd` is this impression's value (not eCPM).
+- Every field is required; amounts are in US dollars. `valueUsd` is this impression's value (not eCPM). The SDK reports the value exactly as passed, with no conversion, so pass US dollars: Android AdMob `AdValue.valueMicros` is in millionths, so divide by `1_000_000`; iOS AdMob `GADAdValue.value` is already in currency units, so pass it as is. If your ad account currency is not USD (see `currencyCode`), convert to US dollars first.
 - `dedupeId` deduplicates: the ad platform's response id for ads, the store order id for purchases (Google Play `orderId`, App Store `transactionId`). Different impressions or payments need different ids.
 
 Android:
