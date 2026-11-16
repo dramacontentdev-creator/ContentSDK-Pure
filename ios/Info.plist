@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!--
+		The pure edition shows no SDK ads: no GADApplicationIdentifier or SKAdNetworkItems needed.
+	-->
+
+	<!--
+		REQUIRED by the SDK UI (built with Compose Multiplatform).
+		Allows 120 Hz on ProMotion iPhones. Without this key the app aborts on launch in Debug
+		builds with `PlistSanityCheck` / `kotlin.error` in the stack trace. Keep it set to true.
+	-->
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
+</dict>
+</plist>

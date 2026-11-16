@@ -1,0 +1,16 @@
+PODS:
+  - ContentSdkPure (1.2.0-SNAPSHOT)
+
+DEPENDENCIES:
+  - ContentSdkPure (from `./ContentSdkPure`)
+
+EXTERNAL SOURCES:
+  ContentSdkPure:
+    :path: "./ContentSdkPure"
+
+SPEC CHECKSUMS:
+  ContentSdkPure: 11ff61daebdea81b559b4769e1a3bc34f75c37df
+
+PODFILE CHECKSUM: ed00d4af420ff0fbd767bfde002bace4602228c8
+
+COCOAPODS: 1.17.0

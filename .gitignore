@@ -1,0 +1,33 @@
+# ---------------------------------------------------------------
+# Content SDK binaries are NOT committed.
+# Download the SDK package for this edition and drop the files in place
+# (see README). Only the .gitkeep placeholders are tracked.
+# ---------------------------------------------------------------
+
+# Android: AAR + the dependency script shipped with the same package
+/android/app/libs/*
+!/android/app/libs/.gitkeep
+/android/app/content-sdk-dependencies.gradle
+
+# iOS: Binary Pod SDK package (ContentSdk.xcframework, podspec, resources)
+/ios/ContentSdkPure/*
+!/ios/ContentSdkPure/.gitkeep
+
+# ---------------------------------------------------------------
+# Build outputs / IDE files
+# ---------------------------------------------------------------
+.DS_Store
+.gradle/
+.kotlin/
+build/
+local.properties
+.idea/
+*.iml
+captures/
+
+Pods/
+*.xcworkspace
+# Personal signing (see ios/Signing.xcconfig)
+Signing.local.xcconfig
+xcuserdata/
+DerivedData/
