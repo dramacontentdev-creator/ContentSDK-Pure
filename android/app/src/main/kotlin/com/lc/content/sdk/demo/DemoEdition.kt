@@ -41,10 +41,10 @@ object DemoEdition {
  */
 object SdkConfig {
     /** YOUR Content App ID. */
-    const val APP_ID = "1d724208-378c-489a-8462-f9038fa1ffd8"
+    const val APP_ID = "17effbdf-99fc-4e44-8850-ba8ed6dfb2e7"
 
     /** YOUR Content App Secret. */
-    const val APP_SECRET = "427908ce2f21dc75bab6202bd7a3390f29e27bfe0b3e686b4570af7e4ef972fd"
+    const val APP_SECRET = "a0e44f2ecdaa5b2cc573ae98f0bf98e815376fc3e167d85187e2636bb73d505c"
 
     /**
      * YOUR logged-in user's id, so watch history follows the user across devices.
